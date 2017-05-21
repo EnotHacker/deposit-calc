@@ -6,6 +6,7 @@
 int main()
 {
 	int m, d;
+	double k;
 	printf("Ваш вклад:");
 	if(scanf("%d",&m)!=1)
 	{
@@ -20,6 +21,7 @@ int main()
 		exit(0);
 	}
 	depositDays( d);
-	profAmount( d, m);
+	k = profAmount( d, m);
+	printf("%f\n", k);
 	return 0;
 }

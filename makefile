@@ -1,39 +1,54 @@
-.PHONY: all clean makedir test
-all: main
 
+CFLAGS= -I thirdparty -I src -c -Wall -Werror
+
+SOURCES = main.c depcalc.c
+EXECUTABLE = main
+DIR = build/src
+DUR = bin/deposit-calc
+DAR = src
+
+SOURCES_TEST = main.c deposit_test.c validation_test.c
+EXECUTABLE_TEST = test
+BUT = build/test
+BT = bin/deposit-calc-test
+DT = test
+
+all: $(DUR)/$(EXECUTABLE) test
+
+$(DUR)/$(EXECUTABLE): $(DIR)/main.o $(DIR)/depcalc.o
+	@if [ ! -d $(DUR) ] ; then mkdir bin; mkdir bin/deposit-calc; fi
+	gcc $(DIR)/main.o $(DIR)/depcalc.o -o $(DUR)/$(EXECUTABLE)
+
+$(DIR)/main.o: $(DAR)/main.c
+	@if [ ! -d $(DIR) ] ; then mkdir build; mkdir build/src; fi
+	gcc $(CFLAGS) -c $(DAR)/main.c -o $(DIR)/main.o
+
+$(DIR)/depcalc.o: $(DAR)/depcalc.c
+	@if [ ! -d $(DIR) ] ; then mkdir build; mkdir build/src; fi
+	gcc $(CFLAGS) -c $(DAR)/depcalc.c -o $(DIR)/depcalc.o
+
+
+
+test: $(BT)/$(EXECUTABLE_TEST)
+
+
+$(BUT)/main.o: $(DT)/main.c
+	@if [ ! -d $(BUT) ] ; then mkdir build; mkdir build/test; fi
+	gcc $(CFLAGS) -c $(DT)/main.c -o $(BUT)/main.o
+
+$(BUT)/deposit_test.o: $(DT)/deposit_test.c
+	@if [ ! -d $(BUT) ] ; then mkdir build; mkdir build/test; fi
+	gcc $(CFLAGS) -c $(DT)/deposit_test.c -o $(BUT)/deposit_test.o
+
+$(BUT)/validation_test.o: $(DT)/validation_test.c
+	@if [ ! -d $(BUT) ] ; then mkdir build; mkdir build/test; fi
+	gcc $(CFLAGS) -c $(DT)/validation_test.c -o $(BUT)/validation_test.o 
+
+$(BT)/$(EXECUTABLE_TEST): $(BUT)/main.o $(BUT)/deposit_test.o $(BUT)/validation_test.o $(DIR)/depcalc.o
+	@if [ ! -d $(BT) ] ; then mkdir bin; mkdir bin/deposit-calc-test; fi
+	gcc $(BUT)/main.o $(BUT)/deposit_test.o $(BUT)/validation_test.o $(DIR)/depcalc.o -o $(BT)/$(EXECUTABLE_TEST)
+
+
+.PHONY : clean test
 clean:
-	rm -rf build/src/*
-
-makedir:
-	mkdir bin
-	mkdir build
-	mkdir build/src
-	mkdir build/test
-
-deletedir:
-	rm -rf build/test
-	rm -rf build/src
-	rm -rf build
-	rm -rf bin
-	
-build/src/main.o: src/main.c
-	gcc -Wall -Werror -c -o build/src/main.o src/main.c
-
-build/src/depcalc.o: src/depcalc.c
-	gcc -Wall -Werror -c -o build/src/depcalc.o src/depcalc.c
-
-main: deletedir makedir build/src/main.o build/src/depcalc.o
-	gcc -Wall -Werror -o bin/depcalc build/src/main.o build/src/depcalc.o
-
-build/test/main.o: test/main.c
-	gcc -Wall -Werror -c -o build/test/main.o test/main.c
-
-build/test/validation_test.o: test/validation_test.c
-	gcc -Wall -Werror -c -o build/test/validation_test.o test/validation_test.c
-
-build/test/deposit_test.o: test/deposit_test.c
-	gcc -Wall -Werror -c -o build/test/deposit_test.o test/deposit_test.c
-	
-test: deletedir makedir build/test/main.o build/test/validation_test.o build/test/deposit_test.o build/src/depcalc.o
-	gcc -Wall -Werror -o bin/test build/test/main.o build/test/validation_test.o build/test/deposit_test.o build/src/depcalc.o
-
+	rm -rf build/src/*.o build/test/*.o bin/deposit-calc/* bin/deposit-calc-test/*

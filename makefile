@@ -1,21 +1,20 @@
 all: main
 
-SOURCES = main.c depcalc.c
-DIR = build/src
-DUR = bin
-DAR = src
+BU = build/src
+BI = bin
+SR = src
 
-main: $(DIR)/main.o $(DIR)/depcalc.o
-	@if [ ! -d $(DUR) ] ; then echo "creating $(DUR)";mkdir bin; fi
-	gcc $(DIR)/main.o $(DIR)/depcalc.o -o $(DUR)/depcalc
-$(DIR)/main.o: $(DAR)/main.c
-	@if [ ! -d $(DIR) ] ; then echo "creating $(DIR)"; mkdir build; mkdir build/src; fi
-	gcc -Wall -Werror -c $(DAR)/main.c -o $(DIR)/main.o
-$(DIR)/depcalc.o: $(DAR)/depcalc.c
-	@if [ ! -d $(DIR) ] ; then echo "creating $(DIR)"; mkdir build; mkdir build/src; fi
-	gcc -Wall -Werror -c $(DAR)/depcalc.c -o $(DIR)/depcalc.o
+main: $(BU)/main.o $(BU)/depcalc.o
+	@if [ ! -d $(BI) ] ; then mkdir bin; fi
+	gcc $(BU)/main.o $(BU)/depcalc.o -o $(BI)/depcalc
+$(BU)/main.o: $(SR)/main.c
+	@if [ ! -d $(BU) ] ; then mkdir build; mkdir build/src; fi
+	gcc -Wall -Werror -c $(SR)/main.c -o $(BU)/main.o
+$(BU)/depcalc.o: $(SR)/depcalc.c
+	@if [ ! -d $(BU) ] ; then mkdir build; mkdir build/src; fi
+	gcc -Wall -Werror -c $(SR)/depcalc.c -o $(BU)/depcalc.o
 
 .PHONY : clean pr
 
 clean:
-	rm -rf build/src/*
+	rm -rf build/src/* bin/*

@@ -1,73 +1,62 @@
 #include <stdio.h>
-#include "../src/depcalc.h"
-#include "../thirdparty/ctest.h"
+#include "depcalc.h"
+#include "ctest.h"
 
 #define YES 1
 #define NO 0
 
+CTEST(ValidationCheck, DayLessNull){
+	const int d = -1;
+	ASSERT_EQUAL( NO, depositDays(d));
+}
 
-CTEST(ValidationCheck, ValidationTest_1){
-	printf("Проверна кол-ва дней");
+CTEST(ValidationCheck, Day300){
 	const int d = 300;
 	ASSERT_EQUAL( YES, depositDays(d));
 }
 
-CTEST(ValidationCheck, ValidationTest_2){
-	printf("Проверна кол-ва дней");
+CTEST(ValidationCheck, Day1){
 	const int d = 1;
 	ASSERT_EQUAL( YES, depositDays(d));
 }
 
-CTEST(ValidationCheck, ValidationTest_3){
-	printf("Проверна кол-ва дней");
+CTEST(ValidationCheck, Day365){
 	const int d = 365;
 	ASSERT_EQUAL( YES, depositDays(d));
 }
 
-CTEST(ValidationCheck, ValidationTest_4){
-	printf("Проверна кол-ва дней");
+CTEST(ValidationCheck, Day366){
 	const int d = 366;
 	ASSERT_EQUAL( NO, depositDays(d));
 }
 
-CTEST(ValidationCheck, ValidationTest_5){
-	printf("Проверна кол-ва дней");
+CTEST(ValidationCheck, DayNull){
 	const int d = 0;
 	ASSERT_EQUAL( NO, depositDays(d));
 }
 
-CTEST(ValidationCheck, ValidationTest_6){
-	printf("Проверна кол-ва денег");
+CTEST(ValidationCheck, Money10000){
 	const int m = 10000;
 	ASSERT_EQUAL( YES, depositAmount(m));
 }
 
-CTEST(ValidationCheck, ValidationTest_7){
-	printf("Проверна кол-ва денег");
+CTEST(ValidationCheck, Money100000){
 	const int m = 100000;
 	ASSERT_EQUAL( YES, depositAmount(m));
 }
 
-CTEST(ValidationCheck, ValidationTest_8){
-	printf("Проверна кол-ва денег");
-	const int m = 1000000;
-	ASSERT_EQUAL( YES, depositAmount(m));
+CTEST(ValidationCheck, MoneyLessNull){
+	const int m = -1;
+	ASSERT_EQUAL( NO, depositAmount(m));
 }
 
-CTEST(ValidationCheck, ValidationTest_9){
-	printf("Проверна кол-ва денег");
+CTEST(ValidationCheck, Money9999){
 	const int m = 9999;
 	ASSERT_EQUAL( NO, depositAmount(m));
 }
 
-CTEST(ValidationCheck, ValidationTest_10){
-	printf("Проверна кол-ва денег");
+CTEST(ValidationCheck, MoneyNull){
 	const int m = 0;
 	ASSERT_EQUAL( NO, depositAmount(m));
 }
 
-CTEST(ValidationCheck, ValidationTest_11){
-	printf("Проверна кол-ва денег");
-	const int m = -1;
-	ASSERT_EQUAL( NO, depositAmount(m));
-}

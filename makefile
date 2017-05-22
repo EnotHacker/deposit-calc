@@ -4,19 +4,20 @@ CFLAGS= -I thirdparty -I src -c -Wall -Werror
 SOURCES = main.c depcalc.c
 EXECUTABLE = main
 DIR = build/src
-DUR = bin/deposit-calc
+DUR = bin
 DAR = src
 
 SOURCES_TEST = main.c deposit_test.c validation_test.c
 EXECUTABLE_TEST = test
 BUT = build/test
-BT = bin/deposit-calc-test
 DT = test
 
-all: $(DUR)/$(EXECUTABLE) test
+all: main test
+
+main: $(DUR)/$(EXECUTABLE) 
 
 $(DUR)/$(EXECUTABLE): $(DIR)/main.o $(DIR)/depcalc.o
-	@if [ ! -d $(DUR) ] ; then mkdir bin; mkdir bin/deposit-calc; fi
+	@if [ ! -d $(DUR) ] ; then mkdir bin; fi
 	gcc $(DIR)/main.o $(DIR)/depcalc.o -o $(DUR)/$(EXECUTABLE)
 
 $(DIR)/main.o: $(DAR)/main.c
@@ -29,7 +30,7 @@ $(DIR)/depcalc.o: $(DAR)/depcalc.c
 
 
 
-test: $(BT)/$(EXECUTABLE_TEST)
+test: $(DUR)/$(EXECUTABLE_TEST)
 
 
 $(BUT)/main.o: $(DT)/main.c
@@ -44,9 +45,9 @@ $(BUT)/validation_test.o: $(DT)/validation_test.c
 	@if [ ! -d $(BUT) ] ; then mkdir build; mkdir build/test; fi
 	gcc $(CFLAGS) -c $(DT)/validation_test.c -o $(BUT)/validation_test.o 
 
-$(BT)/$(EXECUTABLE_TEST): $(BUT)/main.o $(BUT)/deposit_test.o $(BUT)/validation_test.o $(DIR)/depcalc.o
-	@if [ ! -d $(BT) ] ; then mkdir bin; mkdir bin/deposit-calc-test; fi
-	gcc $(BUT)/main.o $(BUT)/deposit_test.o $(BUT)/validation_test.o $(DIR)/depcalc.o -o $(BT)/$(EXECUTABLE_TEST)
+$(DUR)/$(EXECUTABLE_TEST): $(BUT)/main.o $(BUT)/deposit_test.o $(BUT)/validation_test.o $(DIR)/depcalc.o
+	@if [ ! -d $(DUR) ] ; then mkdir bin; mkdir bin/deposit-calc-test; fi
+	gcc $(BUT)/main.o $(BUT)/deposit_test.o $(BUT)/validation_test.o $(DIR)/depcalc.o -o $(DUR)/$(EXECUTABLE_TEST)
 
 
 .PHONY : clean test

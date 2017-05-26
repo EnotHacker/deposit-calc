@@ -1,4 +1,4 @@
 language: c
 compiler: gcc
 install: make
-script: test
+script: ./bin/test
